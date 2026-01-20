@@ -2,6 +2,8 @@
 
 ## set up conda environment
 
+see [env.yml](env.yml)
+
 ```
 # create conda environment once:
 > conda env create -f env.yml
