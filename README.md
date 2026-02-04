@@ -13,7 +13,7 @@ see [env.yml](env.yml)
 > conda env create -f env.yml
 
 # activate conda environment each session:
-> conda activate homonculi
+> conda activate homunculi
 
 # update conda environment whenever we change ./env.yml
 > conda env update -f env.yml
