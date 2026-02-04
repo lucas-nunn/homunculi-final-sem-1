@@ -1,5 +1,9 @@
 # final project
 
+## question
+
+"How does visible presentation time influence speed and accuracy in deciding whether a letter string is a real word, when the string is followed by a visual mask?"
+
 ## set up conda environment
 
 see [env.yml](env.yml)
