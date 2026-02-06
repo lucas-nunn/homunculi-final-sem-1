@@ -18,3 +18,22 @@ see [env.yml](env.yml)
 # update conda environment whenever we change ./env.yml
 > conda env update -f env.yml
 ```
+
+## using Github
+
+```
+# download the repository once:
+> git clone git@github.com:lucas-nunn/homunculi-final-sem-1.git
+
+# navigate to the folder:
+> cd homonculi-final-sem-1
+
+# run the experiment:
+> python3 player.py
+
+# adding or changing a file:
+> git pull
+> git add (file you made.etc)
+> git commit -m (useful message about what you did)
+> git push
+```
