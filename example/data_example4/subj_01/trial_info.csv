@@ -1,0 +1,11 @@
+trial_number,categ,categ_id,img_id
+0,cameleon,0,0
+1,cameleon,0,3
+2,goat,1,4
+3,goat,1,3
+4,cameleon,0,4
+5,goat,1,2
+6,cameleon,0,2
+7,goat,1,1
+8,goat,1,0
+9,cameleon,0,1

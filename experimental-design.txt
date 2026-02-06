@@ -1,0 +1,140 @@
+﻿Research question: How does visible presentation time (brief vs. longer) influence speed and accuracy in deciding whether a letter string is a real English word, when the string is immediately followed by a visual mask?
+
+
+‼️Tasks
+* Lucas: programming
+* Lotte: make the stimuli lists, create a .txt file and upload on Github
+* Kezia: go over design & implication
+* Lias: figure out what stimulus presentation time length makes sense
+* References/motivation
+
+
+Implication: 
+
+
+🎯Hypotheses
+* H1 (main effect of duration): Longer visible presentation (200 ms) will yield higher accuracy and faster RTs than brief presentation (40 ms).
+* H2 (main effect of lexicality): Words will be categorized faster and more accurately than pseudowords.
+* H3 (interaction): The brief (40 ms) condition will disproportionately hurt pseudoword performance (lower accuracy / slower correct RTs), because pseudowords generally require more evidence to reject.
+
+
+📃Design overview: Within-subject 2 × 2 factorial design:
+Independent variables (IVs)
+1. Lexicality: Word vs. Pseudoword
+2. Presentation duration: 40 ms vs. 200 ms
+(Mask follows immediately in both conditions.)
+Dependent variables (DVs)
+   1. Accuracy (correct word/pseudoword classification)
+   2. Reaction time (RT) for correct trials (ms), measured from stimulus onset (or from mask onset—choose one and stick to it)
+
+
+Controls / constants
+   * Same masking procedure across conditions
+   * Counterbalanced response mapping
+   * Strings matched roughly on length (4–7 letters)
+
+
+Participants
+   * N = 5
+   * Fluent English readers
+   * Normal or corrected-to-normal vision
+
+
+Stimulus set
+   * Pseudowords were generated using the ARC nonword database (https://journals.sagepub.com/doi/epdf/10.1080/02724980244000099) using the following settings.
+   1. “Nonwords” (look and sound like english, but have no meaning)
+   2. “Only orthographically existing onsets” (beginning of word must be a combination of letters that already exists at the start of real English words)
+   3. “Only orthographically existing bodies” (the vowel and everything after it must match an existing English word ending)
+   4. “Only legal bigrams” (only pairs of letters that actually appear in the English dictionary)
+   5. Number of letters = 7  
+      * 10 words, 10 pseudowords, 4–7 letters each
+      * Recommendation: choose high familiarity/common words to avoid ambiguity, and avoid proper nouns.
+Example pseudowords (yours are good; just ensure none are real words or common surnames):
+      * drean, gardon, tible, windal, plone, froat, nemp, slinter, brask, marden
+Example words (simple, common, unambiguous):
+      * garden, window, table, dream, silver, candle, forest, winter, yellow, sudden
+Optional refinement (if you want one extra “methods” sentence):
+Try to roughly match words and pseudowords on length and basic orthographic “English-likeness” (bigram frequency), but for the class project, length matching is enough.
+Apparatus / implementation notes (important for masking)
+      * Use a framework with reliable timing (e.g., PsychoPy desktop, or jsPsych in-browser).
+      * Use a fixed-width font if you want consistent visual width, or just pick a standard sans serif and center the stimulus.
+      * Record refresh rate and note that 40 ms ≈ 2–3 frames at 60 Hz (so actual timing may be quantized by frame rate).
+
+
+Trial structure
+Single trial:
+      1. Fixation cross: 500 ms (e.g., “+” centered)
+      2. Target string (word/pseudoword): 40 ms or 200 ms
+      3. Mask: 100–150 ms (or until response, if you want stronger prevention of continued processing)
+      * Mask example: ####### matched to stimulus length, or a pattern like XQMTVZP repeated to length
+      4. Response window: up to 2000 ms (or until response)
+      5. Inter-trial interval (ITI): 500 ms
+Response keys:
+      * “F” = WORD
+      * “J” = NOT A WORD
+(Or counterbalance across participants in a real study.)
+
+
+Number of trials / counterbalancing
+With 20 total strings and 2 durations, you have options:
+Simplest (works well for N=2)
+         * Present each item once per duration:
+         * 20 items × 2 durations = 40 trials
+         * Randomize trial order.
+Slightly more stable RTs (still small)
+         * Repeat the whole set twice: 80 trials total
+         * Add a short break halfway.
+Randomization constraints (nice-to-have):
+         * No more than 3 trials in a row of the same lexicality
+         * Roughly balance durations across the task
+
+
+Participant instructions 
+“You will see a series of letter strings. Some are real English words; others are not real words.
+Each trial begins with a fixation cross (+). Then a letter string will appear very briefly and will be immediately followed by a mask.
+Your task is to decide as quickly and accurately as possible whether the letter string was a real English word.
+Press F for WORD and J for NOT A WORD.
+Please keep your fingers on the keys and respond as soon as you know the answer. If you’re unsure, make your best guess.”
+(Optional: add 4–6 practice trials with feedback.)
+
+
+Data handling and exclusions
+Trial-level exclusions (RT cleaning)
+         * Exclude trials with:
+         * RT < 200 ms (anticipations / accidental keypresses)
+         * RT > 2000 ms (timeouts or lapses)
+         * Analyze RTs only for correct trials (standard for lexical decision)
+Participant-level sanity checks
+         * Overall accuracy too low (e.g., <60%) → flag as not following task
+         * Extremely high exclusion rate (e.g., >25% trials excluded) → flag
+
+
+Analysis 
+For each participant and condition (Lexicality × Duration):
+         * Mean accuracy
+         * Mean correct RT (and median RT—often helpful with skew)
+Inferential plan (for the “real study” version)
+         * Use a within-subject model:
+         * Accuracy: logistic mixed-effects model (or repeated-measures ANOVA on accuracy proportions if keeping it simple)
+         * RTs: linear mixed-effects model on log(RT) (recommended), or rmANOVA on mean RTs
+         * Fixed effects: Duration, Lexicality, Duration×Lexicality
+         * Random effects: subject intercepts (and ideally item intercepts, if enough trials)
+What you can do with N=2 (honest framing)
+         * Plot per-participant condition means
+         * Report effect directions and consistency (e.g., both participants show faster RT at 200 ms)
+         * Treat as a demonstration/pilot, not a generalizable conclusion
+
+
+Expected results (what you’d predict in the write-up)
+         * Higher accuracy and faster RTs in 200 ms vs 40 ms
+         * Word advantage: words faster/more accurate than pseudowords
+         * Biggest difficulty: pseudowords at 40 ms, likely more errors and slower correct RTs
+Deliverables for the programming project
+         * Working task with:
+         * Randomization
+         * Reliable timing and masking
+         * Logging (trial-by-trial: participant ID, trial number, stimulus, lexicality, duration, response, correctness, RT, excluded?)
+         * A short analysis script/notebook that:
+         * Applies RT exclusions
+         * Computes condition means
+         * Outputs plots (RT + accuracy)

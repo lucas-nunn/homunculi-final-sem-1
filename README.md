@@ -25,19 +25,23 @@ see [env.yml](env.yml)
 # download the repository once:
 > git clone git@github.com:lucas-nunn/homunculi-final-sem-1.git
 
-# navigate to the folder:
+# adding or changing a file:
+> git pull
+> git add <file you made.etc>
+> git status
+    - make sure it says "your branch is up to date" and "changes to be committed: <your file(s)>"
+> git commit -m <useful message about what you did>
+> git push -u origin main
+```
+
+## running the experiment
+
+for full details see [parameters.md](parameterds.md)
+
+```
+# make sure you are in the project directory
 > cd homunculi-final-sem-1
 
 # run the experiment:
 > python3 player.py
-
-# adding or changing a file:
-> git pull
-> git add <file you made.etc>
-
-> git status
-    - make sure it says "your branch is up to date" and "changes to be committed: <your file(s)>"
-
-> git commit -m <useful message about what you did>
-> git push -u origin main
 ```
