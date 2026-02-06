@@ -16,44 +16,56 @@
  * Timing uses requestAnimationFrame for frame-accurate presentation.
  */
 
+import { db } from "./firebase-config.js";
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  increment,
+} from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+
+let sessionDocId = null;
+
 // =========================================================================
 // Configuration
 // =========================================================================
 const CONFIG = {
   // stimuli
   words: [
-    "garden",
+    "river",
     "window",
-    "table",
-    "dream",
-    "silver",
-    "candle",
+    "sugar",
     "forest",
-    "winter",
-    "yellow",
-    "sudden",
+    "jacket",
+    "island",
+    "kitten",
+    "cheese",
+    "hammer",
+    "candle",
   ],
   pseudowords: [
-    "drean",
-    "gardon",
     "tible",
-    "windal",
-    "plone",
-    "froat",
-    "nemp",
-    "slinter",
-    "brask",
-    "marden",
+    "hause",
+    "gardon",
+    "flomer",
+    "desern",
+    "strean",
+    "perlun",
+    "morle",
+    "stome",
+    "waper",
   ],
 
   // practice stimuli (separate from main set)
   practiceItems: [
-    { stimulus: "house", lexicality: "word" },
-    { stimulus: "river", lexicality: "word" },
-    { stimulus: "bread", lexicality: "word" },
-    { stimulus: "brike", lexicality: "pseudoword" },
-    { stimulus: "flurn", lexicality: "pseudoword" },
-    { stimulus: "plave", lexicality: "pseudoword" },
+    { stimulus: "finger", lexicality: "word" },
+    { stimulus: "church", lexicality: "word" },
+    { stimulus: "carrot", lexicality: "word" },
+    { stimulus: "hamen", lexicality: "pseudoword" },
+    { stimulus: "pamer", lexicality: "pseudoword" },
+    { stimulus: "waten", lexicality: "pseudoword" },
   ],
 
   // timing in ms
@@ -396,6 +408,47 @@ function applyFormParameters() {
 }
 
 // =========================================================================
+// Firestore helpers
+// =========================================================================
+
+async function createSession(username, totalTrials) {
+  const docRef = await addDoc(collection(db, "sessions"), {
+    username,
+    status: "in_progress",
+    totalTrials,
+    completedTrials: 0,
+    startedAt: serverTimestamp(),
+    completedAt: null,
+  });
+  return docRef.id;
+}
+
+async function saveTrialToFirestore(username, result) {
+  await addDoc(collection(db, "trials"), {
+    sessionId: sessionDocId,
+    username,
+    trialNumber: result.trialNumber,
+    stimulus: result.stimulus,
+    lexicality: result.lexicality,
+    duration: result.duration,
+    response: result.response,
+    RT: result.RT,
+    accuracy: result.accuracy,
+    timestamp: serverTimestamp(),
+  });
+  await updateDoc(doc(db, "sessions", sessionDocId), {
+    completedTrials: increment(1),
+  });
+}
+
+async function completeSession() {
+  await updateDoc(doc(db, "sessions", sessionDocId), {
+    status: "completed",
+    completedAt: serverTimestamp(),
+  });
+}
+
+// =========================================================================
 // Summary statistics for end screen
 // =========================================================================
 
@@ -510,9 +563,27 @@ function populateSummary(results) {
 
 async function runExperiment() {
   applyFormParameters();
-  const subjId = document.getElementById("subject-id").value || "1";
+  const subjId = document.getElementById("subject-id").value.trim();
+  if (!subjId) {
+    alert("Please enter a username.");
+    return;
+  }
   const includePractice = document.getElementById("param-practice").checked;
+  const devMode = document.getElementById("param-dev-mode").checked;
   const results = [];
+
+  // Create Firestore session
+  const totalTrials = devMode
+    ? 10
+    : CONFIG.nReps *
+      (CONFIG.words.length + CONFIG.pseudowords.length) *
+      CONFIG.durations.length;
+
+  try {
+    sessionDocId = await createSession(subjId, totalTrials);
+  } catch (err) {
+    console.error("Failed to create Firestore session:", err);
+  }
 
   // --- Practice (optional) ---
   if (includePractice) {
@@ -529,7 +600,10 @@ async function runExperiment() {
   }
 
   // --- Main trials ---
-  const trials = generateTrials();
+  let trials = generateTrials();
+  if (devMode) {
+    trials = trials.slice(0, 10);
+  }
   const midpoint = Math.floor(trials.length / 2);
 
   for (let i = 0; i < trials.length; i++) {
@@ -543,6 +617,20 @@ async function runExperiment() {
     result.trialNumber = i;
     result.subject = subjId;
     results.push(result);
+
+    // Fire-and-forget write to Firestore (don't block next trial)
+    if (sessionDocId) {
+      saveTrialToFirestore(subjId, result).catch((err) =>
+        console.error("Firestore write failed for trial", i, err),
+      );
+    }
+  }
+
+  // Mark session complete
+  if (sessionDocId) {
+    completeSession().catch((err) =>
+      console.error("Failed to mark session complete:", err),
+    );
   }
 
   // --- End screen with summary ---
@@ -564,7 +652,7 @@ async function runExperiment() {
   document.getElementById("btn-download").addEventListener("click", () => {
     downloadCSV(
       csv,
-      `subj_${String(subjId).padStart(2, "0")}_trial_responses.csv`,
+      `${subjId.replace(/[^a-zA-Z0-9_-]/g, "_")}_trial_responses.csv`,
     );
   });
 }

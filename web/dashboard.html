@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LDT Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div id="dashboard">
+      <header>
+        <h1>Lexical Decision Task &mdash; Live Dashboard</h1>
+        <p id="status-line">Connecting to Firestore...</p>
+      </header>
+
+      <div class="split-layout">
+        <!-- Left: Leaderboard -->
+        <section id="section-participants" class="split-left">
+          <h2>Leaderboard</h2>
+          <div id="participant-counts">
+            <span class="count-badge badge-progress">
+              <span class="dot dot-progress"></span>
+              <span id="count-in-progress">0</span> in progress
+            </span>
+            <span class="count-badge badge-done">
+              <span class="dot dot-done"></span>
+              <span id="count-completed">0</span> completed
+            </span>
+            <span class="count-badge">
+              <span id="count-trials">0</span> total trials
+            </span>
+          </div>
+          <table id="participant-table" class="summary-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Status</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody id="participant-tbody"></tbody>
+          </table>
+        </section>
+
+        <!-- Right: Charts stacked vertically -->
+        <section id="section-charts" class="split-right">
+          <h2>Results</h2>
+          <div class="chart-stack">
+            <div class="chart-container">
+              <canvas id="chart-accuracy"></canvas>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-rt"></canvas>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script type="module" src="dashboard.js"></script>
+  </body>
+</html>

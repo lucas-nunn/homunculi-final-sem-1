@@ -29,8 +29,13 @@
 
           <div class="params-section">
             <div class="param-group">
-              <label for="subject-id">Participant ID</label>
-              <input id="subject-id" type="number" min="1" value="1" />
+              <label for="subject-id">Username</label>
+              <input
+                id="subject-id"
+                type="text"
+                placeholder="Enter your name"
+                autocomplete="off"
+              />
             </div>
 
             <div class="param-group">
@@ -52,6 +57,13 @@
               <label for="param-swap">
                 <input id="param-swap" type="checkbox" />
                 Swap response keys (counterbalance)
+              </label>
+            </div>
+
+            <div class="param-group">
+              <label for="param-dev-mode">
+                <input id="param-dev-mode" type="checkbox" />
+                Dev mode (10 trials only)
               </label>
             </div>
 
@@ -252,6 +264,6 @@
       </div>
     </div>
 
-    <script src="experiment.js"></script>
+    <script type="module" src="experiment.js"></script>
   </body>
 </html>
