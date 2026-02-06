@@ -36,7 +36,7 @@ see [env.yml](env.yml)
 
 ## running the experiment
 
-for full details see [parameters.md](parameterds.md)
+for full details see [parameters.md](parameters.md)
 
 ```
 # make sure you are in the project directory
@@ -44,4 +44,14 @@ for full details see [parameters.md](parameterds.md)
 
 # run the experiment:
 > python3 player.py
+```
+
+## running the data analysis
+
+```
+# make sure you are in the project directory
+> cd homunculi-final-sem-1
+
+# run the experiment:
+> python3 analysis.py
 ```
