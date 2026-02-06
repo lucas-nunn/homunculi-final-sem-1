@@ -1,0 +1,362 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fff;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* allow scrolling on small screens */
+  overflow: auto;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+#experiment {
+  text-align: center;
+  width: 100%;
+}
+
+/* ----------------------------------------------------------------
+   Screens: hidden by default, .active makes them visible
+   ---------------------------------------------------------------- */
+.screen {
+  display: none;
+}
+.screen.active {
+  display: block;
+}
+
+/* ----------------------------------------------------------------
+   Info screens (welcome, practice, break, end)
+   ---------------------------------------------------------------- */
+.screen-card {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 48px 36px;
+  line-height: 1.7;
+}
+
+.screen-card h2 {
+  font-size: 1.6em;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #111;
+  letter-spacing: -0.02em;
+}
+
+.screen-card .subtitle {
+  font-size: 0.95em;
+  color: #666;
+  margin-bottom: 28px;
+}
+
+.screen-card p {
+  margin-bottom: 6px;
+  font-size: 0.95em;
+  color: #333;
+}
+
+/* Horizontal rule used as section divider */
+.screen-card hr {
+  border: none;
+  border-top: 1px solid #e5e5e5;
+  margin: 24px 0;
+}
+
+/* ----------------------------------------------------------------
+   Kbd tags
+   ---------------------------------------------------------------- */
+kbd {
+  background: #f4f4f5;
+  border: 1px solid #d4d4d8;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: "SF Mono", "Fira Code", "Courier New", monospace;
+  font-size: 0.88em;
+  color: #333;
+}
+
+/* ----------------------------------------------------------------
+   Buttons
+   ---------------------------------------------------------------- */
+button {
+  padding: 10px 28px;
+  font-size: 0.95em;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #d4d4d8;
+  border-radius: 8px;
+  background: #fff;
+  color: #1a1a1a;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+button:hover {
+  background: #f4f4f5;
+  border-color: #a1a1aa;
+}
+
+.btn-primary {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+.btn-primary:hover {
+  background: #333;
+  border-color: #333;
+}
+
+/* ----------------------------------------------------------------
+   Parameter form on welcome screen
+   ---------------------------------------------------------------- */
+.params-section {
+  text-align: left;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.param-group {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.9em;
+  color: #444;
+}
+.param-group label {
+  flex: 1;
+}
+
+.param-group input[type="number"],
+.param-group select {
+  padding: 6px 10px;
+  font-size: 0.9em;
+  border: 1px solid #d4d4d8;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.param-group input[type="number"]:focus,
+.param-group select:focus {
+  border-color: #888;
+}
+.param-group input[type="number"] {
+  width: 80px;
+  text-align: center;
+}
+
+.param-group input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: #111;
+}
+
+.advanced-settings {
+  margin: 16px 0 4px;
+  text-align: left;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.advanced-settings summary {
+  cursor: pointer;
+  font-size: 0.85em;
+  color: #888;
+  padding: 4px 0;
+  transition: color 0.15s;
+}
+.advanced-settings summary:hover {
+  color: #555;
+}
+.advanced-settings .param-group {
+  margin-left: 0;
+}
+
+/* ----------------------------------------------------------------
+   Summary tables on end screen
+   ---------------------------------------------------------------- */
+#screen-end {
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+#screen-end h3 {
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin-top: 28px;
+  margin-bottom: 10px;
+}
+
+.summary-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 0.88em;
+  width: 100%;
+  max-width: 460px;
+}
+.summary-table th,
+.summary-table td {
+  padding: 8px 14px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+.summary-table thead th {
+  background: #fafafa;
+  color: #666;
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid #e5e5e5;
+}
+.summary-table td:first-child {
+  font-weight: 600;
+  text-align: left;
+  color: #333;
+}
+.summary-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Overall score highlight */
+.overall-score {
+  font-size: 1.05em;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+/* ----------------------------------------------------------------
+   Mobile / desktop visibility
+   ---------------------------------------------------------------- */
+.mobile-only {
+  display: none !important;
+}
+body.touch .mobile-only {
+  display: block !important;
+}
+body.touch .desktop-only {
+  display: none !important;
+}
+
+/* ----------------------------------------------------------------
+   Mobile response buttons
+   ---------------------------------------------------------------- */
+#mobile-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none !important;
+  gap: 0;
+}
+body.touch.awaiting-response #mobile-buttons {
+  display: flex !important;
+}
+
+.btn-response {
+  flex: 1;
+  padding: 28px 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  border: none;
+  border-top: 1px solid #e5e5e5;
+  border-radius: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.1s;
+}
+#btn-word {
+  background: #dcfce7;
+  border-right: 1px solid #e5e5e5;
+}
+#btn-word:active {
+  background: #bbf7d0;
+}
+#btn-nonword {
+  background: #fee2e2;
+  border-left: 1px solid #e5e5e5;
+}
+#btn-nonword:active {
+  background: #fecaca;
+}
+
+/* Continue buttons on info screens (mobile only) */
+.btn-continue {
+  margin-top: 16px;
+  padding: 14px 32px;
+  font-size: 1.05em;
+}
+
+/* On touch devices, give trial content room above the button bar */
+body.touch #screen-trial {
+  padding-bottom: 90px;
+}
+
+/* ----------------------------------------------------------------
+   Trial display area
+   ---------------------------------------------------------------- */
+#trial-content {
+  font-size: 48px;
+  font-family: "Courier New", Courier, monospace;
+  min-height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fixation {
+  font-size: 48px;
+  font-family: "Courier New", Courier, monospace;
+  color: #333;
+}
+
+.stimulus,
+.mask {
+  font-size: 48px;
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.prompt {
+  font-size: 22px;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #555;
+}
+
+.feedback {
+  font-size: 22px;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #333;
+}
+
+/* Mobile adjustments: allow vertical scrolling and reduce padding */
+@media (max-width: 720px) {
+  body {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+  .screen-card {
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding: 24px 18px;
+    margin: 0 12px;
+  }
+}

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lexical Decision Task</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="experiment">
+      <!-- Welcome / instructions -->
+      <div id="screen-welcome" class="screen active">
+        <div class="screen-card">
+          <h2>Lexical Decision Task</h2>
+          <p class="subtitle">A masked word recognition experiment</p>
+
+          <p>You will see letter strings briefly followed by a mask.</p>
+          <p>Decide if each string is a <strong>real English word</strong>.</p>
+          <p class="desktop-only">
+            Press <kbd>F</kbd> for <strong>WORD</strong>, <kbd>J</kbd> for
+            <strong>NOT A WORD</strong>.
+          </p>
+          <p class="mobile-only">
+            Tap <strong>WORD</strong> or <strong>NOT A WORD</strong> to respond.
+          </p>
+          <p>Respond as quickly and accurately as possible.</p>
+
+          <hr />
+
+          <div class="params-section">
+            <div class="param-group">
+              <label for="subject-id">Participant ID</label>
+              <input id="subject-id" type="number" min="1" value="1" />
+            </div>
+
+            <div class="param-group">
+              <label for="param-reps">Repetitions</label>
+              <select id="param-reps">
+                <option value="1" selected>1 (40 trials)</option>
+                <option value="2">2 (80 trials)</option>
+              </select>
+            </div>
+
+            <div class="param-group">
+              <label for="param-practice">
+                <input id="param-practice" type="checkbox" checked />
+                Include practice trials
+              </label>
+            </div>
+
+            <div class="param-group">
+              <label for="param-swap">
+                <input id="param-swap" type="checkbox" />
+                Swap response keys (counterbalance)
+              </label>
+            </div>
+
+            <details class="advanced-settings">
+              <summary>Advanced timing settings</summary>
+              <div class="param-group">
+                <label for="param-fix-dur">Fixation duration (ms)</label>
+                <input
+                  id="param-fix-dur"
+                  type="number"
+                  min="0"
+                  step="50"
+                  value="500"
+                />
+              </div>
+              <div class="param-group">
+                <label for="param-mask-dur">Mask duration (ms)</label>
+                <input
+                  id="param-mask-dur"
+                  type="number"
+                  min="0"
+                  step="50"
+                  value="150"
+                />
+              </div>
+              <div class="param-group">
+                <label for="param-timeout">Response timeout (ms)</label>
+                <input
+                  id="param-timeout"
+                  type="number"
+                  min="500"
+                  step="500"
+                  value="2000"
+                />
+              </div>
+              <div class="param-group">
+                <label for="param-fb-dur">Feedback duration (ms)</label>
+                <input
+                  id="param-fb-dur"
+                  type="number"
+                  min="0"
+                  step="100"
+                  value="500"
+                />
+              </div>
+            </details>
+          </div>
+
+          <hr />
+
+          <button id="btn-start" class="btn-primary">Start Experiment</button>
+        </div>
+      </div>
+
+      <!-- Practice intro -->
+      <div id="screen-practice-intro" class="screen">
+        <div class="screen-card">
+          <h2>Practice Trials</h2>
+          <p>These trials will <strong>not</strong> be recorded.</p>
+          <p class="desktop-only">
+            Press <kbd>F</kbd> or <kbd>J</kbd> to start practice.
+          </p>
+          <button class="mobile-only btn-continue">
+            Tap to start practice
+          </button>
+        </div>
+      </div>
+
+      <!-- Practice complete -->
+      <div id="screen-practice-done" class="screen">
+        <div class="screen-card">
+          <h2>Practice Complete!</h2>
+          <p>The real experiment will now begin.</p>
+          <p class="desktop-only">
+            Press <kbd>F</kbd> or <kbd>J</kbd> to start.
+          </p>
+          <button class="mobile-only btn-continue">Tap to start</button>
+        </div>
+      </div>
+
+      <!-- Midpoint break -->
+      <div id="screen-break" class="screen">
+        <div class="screen-card">
+          <h2>Halfway done!</h2>
+          <p>Take a short break.</p>
+          <p class="desktop-only">
+            Press <kbd>F</kbd> or <kbd>J</kbd> to continue.
+          </p>
+          <button class="mobile-only btn-continue">Tap to continue</button>
+        </div>
+      </div>
+
+      <!-- Trial display (fixation, stimulus, mask, response prompt) -->
+      <div id="screen-trial" class="screen">
+        <div id="trial-content"></div>
+      </div>
+
+      <!-- Mobile response buttons (hidden on desktop, shown on touch devices during response phase) -->
+      <div id="mobile-buttons" class="mobile-only">
+        <button id="btn-word" class="btn-response">WORD</button>
+        <button id="btn-nonword" class="btn-response">NOT A WORD</button>
+      </div>
+
+      <!-- End screen -->
+      <div id="screen-end" class="screen">
+        <div class="screen-card">
+          <h2>Thank you!</h2>
+          <p id="end-overall" class="overall-score"></p>
+
+          <hr />
+
+          <h3>Performance by condition</h3>
+          <table id="summary-table" class="summary-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="2">Accuracy</th>
+                <th colspan="2">Mean correct RT (s)</th>
+              </tr>
+              <tr>
+                <th>Condition</th>
+                <th id="th-acc-dur0"></th>
+                <th id="th-acc-dur1"></th>
+                <th id="th-rt-dur0"></th>
+                <th id="th-rt-dur1"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Words</td>
+                <td id="acc-word-dur0"></td>
+                <td id="acc-word-dur1"></td>
+                <td id="rt-word-dur0"></td>
+                <td id="rt-word-dur1"></td>
+              </tr>
+              <tr>
+                <td>Pseudowords</td>
+                <td id="acc-pw-dur0"></td>
+                <td id="acc-pw-dur1"></td>
+                <td id="rt-pw-dur0"></td>
+                <td id="rt-pw-dur1"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>By lexicality</h3>
+          <table id="summary-lex" class="summary-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Accuracy</th>
+                <th>Mean correct RT (s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Words</td>
+                <td id="lex-acc-word"></td>
+                <td id="lex-rt-word"></td>
+              </tr>
+              <tr>
+                <td>Pseudowords</td>
+                <td id="lex-acc-pw"></td>
+                <td id="lex-rt-pw"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>By duration</h3>
+          <table id="summary-dur" class="summary-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Accuracy</th>
+                <th>Mean correct RT (s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="dur-label-0"></td>
+                <td id="dur-acc-0"></td>
+                <td id="dur-rt-0"></td>
+              </tr>
+              <tr>
+                <td id="dur-label-1"></td>
+                <td id="dur-acc-1"></td>
+                <td id="dur-rt-1"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr />
+
+          <button id="btn-download" class="btn-primary">
+            Download Results (CSV)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="experiment.js"></script>
+  </body>
+</html>
