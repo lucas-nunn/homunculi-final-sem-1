@@ -391,6 +391,17 @@ function downloadCSV(csv, filename) {
 // =========================================================================
 
 function applyFormParameters() {
+  // Parse durations from comma-separated input (ms)
+  const durInput = document.getElementById("param-durations").value;
+  const parsed = durInput
+    .split(",")
+    .map((s) => parseInt(s.trim(), 10))
+    .filter((n) => !isNaN(n) && n > 0)
+    .sort((a, b) => a - b);
+  if (parsed.length > 0) {
+    CONFIG.durations = parsed;
+  }
+
   CONFIG.nReps = parseInt(document.getElementById("param-reps").value) || 1;
   CONFIG.fixationDuration =
     parseInt(document.getElementById("param-fix-dur").value) || 500;
@@ -506,55 +517,76 @@ function populateSummary(results) {
   document.getElementById("end-overall").textContent =
     `You completed ${results.length} trials with ${nCorrect}/${results.length} correct (${pct(nCorrect / results.length)}).`;
 
-  // 2x2 table headers
-  document.getElementById("th-acc-dur0").textContent = durations[0] + " ms";
-  document.getElementById("th-acc-dur1").textContent = durations[1] + " ms";
-  document.getElementById("th-rt-dur0").textContent = durations[0] + " ms";
-  document.getElementById("th-rt-dur1").textContent = durations[1] + " ms";
+  const container = document.getElementById("summary-container");
+  container.innerHTML = "";
 
-  // 2x2 cells
-  document.getElementById("acc-word-dur0").textContent = pct(
-    cells.word[durations[0]].acc,
-  );
-  document.getElementById("acc-word-dur1").textContent = pct(
-    cells.word[durations[1]].acc,
-  );
-  document.getElementById("acc-pw-dur0").textContent = pct(
-    cells.pseudoword[durations[0]].acc,
-  );
-  document.getElementById("acc-pw-dur1").textContent = pct(
-    cells.pseudoword[durations[1]].acc,
-  );
-  document.getElementById("rt-word-dur0").textContent = fmt(
-    cells.word[durations[0]].rt,
-  );
-  document.getElementById("rt-word-dur1").textContent = fmt(
-    cells.word[durations[1]].rt,
-  );
-  document.getElementById("rt-pw-dur0").textContent = fmt(
-    cells.pseudoword[durations[0]].rt,
-  );
-  document.getElementById("rt-pw-dur1").textContent = fmt(
-    cells.pseudoword[durations[1]].rt,
-  );
+  // --- Performance by condition (lexicality x duration) ---
+  const h3Cond = document.createElement("h3");
+  h3Cond.textContent = "Performance by condition";
+  container.appendChild(h3Cond);
 
-  // by lexicality
-  document.getElementById("lex-acc-word").textContent = pct(byLex.word.acc);
-  document.getElementById("lex-acc-pw").textContent = pct(byLex.pseudoword.acc);
-  document.getElementById("lex-rt-word").textContent = fmt(byLex.word.rt);
-  document.getElementById("lex-rt-pw").textContent = fmt(byLex.pseudoword.rt);
+  const tblCond = document.createElement("table");
+  tblCond.className = "summary-table";
 
-  // by duration
-  document.getElementById("dur-label-0").textContent = durations[0] + " ms";
-  document.getElementById("dur-label-1").textContent = durations[1] + " ms";
-  document.getElementById("dur-acc-0").textContent = pct(
-    byDur[durations[0]].acc,
-  );
-  document.getElementById("dur-acc-1").textContent = pct(
-    byDur[durations[1]].acc,
-  );
-  document.getElementById("dur-rt-0").textContent = fmt(byDur[durations[0]].rt);
-  document.getElementById("dur-rt-1").textContent = fmt(byDur[durations[1]].rt);
+  // header row 1: group headers
+  const hr1 = document.createElement("tr");
+  hr1.innerHTML =
+    `<th></th>` +
+    `<th colspan="${durations.length}">Accuracy</th>` +
+    `<th colspan="${durations.length}">Mean correct RT (s)</th>`;
+  // header row 2: individual duration labels
+  const hr2 = document.createElement("tr");
+  hr2.innerHTML =
+    `<th>Condition</th>` +
+    durations.map((d) => `<th>${d} ms</th>`).join("") +
+    durations.map((d) => `<th>${d} ms</th>`).join("");
+
+  const thead = document.createElement("thead");
+  thead.appendChild(hr1);
+  thead.appendChild(hr2);
+  tblCond.appendChild(thead);
+
+  const tbodyCond = document.createElement("tbody");
+  for (const [lex, label] of [["word", "Words"], ["pseudoword", "Pseudowords"]]) {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      `<td>${label}</td>` +
+      durations.map((d) => `<td>${pct(cells[lex][d].acc)}</td>`).join("") +
+      durations.map((d) => `<td>${fmt(cells[lex][d].rt)}</td>`).join("");
+    tbodyCond.appendChild(tr);
+  }
+  tblCond.appendChild(tbodyCond);
+  container.appendChild(tblCond);
+
+  // --- By lexicality ---
+  const h3Lex = document.createElement("h3");
+  h3Lex.textContent = "By lexicality";
+  container.appendChild(h3Lex);
+
+  const tblLex = document.createElement("table");
+  tblLex.className = "summary-table";
+  tblLex.innerHTML =
+    `<thead><tr><th></th><th>Accuracy</th><th>Mean correct RT (s)</th></tr></thead>` +
+    `<tbody>` +
+    `<tr><td>Words</td><td>${pct(byLex.word.acc)}</td><td>${fmt(byLex.word.rt)}</td></tr>` +
+    `<tr><td>Pseudowords</td><td>${pct(byLex.pseudoword.acc)}</td><td>${fmt(byLex.pseudoword.rt)}</td></tr>` +
+    `</tbody>`;
+  container.appendChild(tblLex);
+
+  // --- By duration ---
+  const h3Dur = document.createElement("h3");
+  h3Dur.textContent = "By duration";
+  container.appendChild(h3Dur);
+
+  const tblDur = document.createElement("table");
+  tblDur.className = "summary-table";
+  const durRows = durations
+    .map((d) => `<tr><td>${d} ms</td><td>${pct(byDur[d].acc)}</td><td>${fmt(byDur[d].rt)}</td></tr>`)
+    .join("");
+  tblDur.innerHTML =
+    `<thead><tr><th></th><th>Accuracy</th><th>Mean correct RT (s)</th></tr></thead>` +
+    `<tbody>${durRows}</tbody>`;
+  container.appendChild(tblDur);
 }
 
 // =========================================================================
@@ -656,6 +688,25 @@ async function runExperiment() {
     );
   });
 }
+
+// =========================================================================
+// Dynamic trial count in the reps dropdown
+// =========================================================================
+function updateTrialCounts() {
+  const durInput = document.getElementById("param-durations").value;
+  const nDurations = durInput
+    .split(",")
+    .map((s) => parseInt(s.trim(), 10))
+    .filter((n) => !isNaN(n) && n > 0).length || CONFIG.durations.length;
+  const nStimuli = CONFIG.words.length + CONFIG.pseudowords.length;
+  const base = nStimuli * nDurations;
+  const select = document.getElementById("param-reps");
+  select.options[0].textContent = `1 (${base} trials)`;
+  select.options[1].textContent = `2 (${base * 2} trials)`;
+}
+
+document.getElementById("param-durations").addEventListener("input", updateTrialCounts);
+updateTrialCounts();
 
 // =========================================================================
 // Start

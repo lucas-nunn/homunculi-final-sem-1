@@ -1,0 +1,6 @@
+- determine timings & intervals
+  - fixation, mask, conditions, gap
+- apply to python ^
+- hits / miss feedback?
+- collect data with python
+- data analysis

@@ -78,7 +78,7 @@ function updateParticipantList(trials) {
   document.getElementById("count-completed").textContent = completed;
   document.getElementById("count-trials").textContent = trials.length;
 
-  // Compute per-participant accuracy from trial data
+  // Compute per-participant accuracy and mean correct RT from trial data
   const trialsByUser = groupBy(trials, "username");
   const ranked = allSessions
     .map((s) => {
@@ -86,7 +86,15 @@ function updateParticipantList(trials) {
       const n = userTrials.length;
       const acc =
         n > 0 ? userTrials.reduce((sum, t) => sum + t.accuracy, 0) / n : null;
-      return { ...s, acc, nTrials: n };
+      const correct = userTrials.filter(
+        (t) => t.accuracy === 1 && t.RT !== "" && t.RT !== null,
+      );
+      const meanRT =
+        correct.length > 0
+          ? correct.reduce((sum, t) => sum + parseFloat(t.RT), 0) /
+            correct.length
+          : null;
+      return { ...s, acc, meanRT, nTrials: n };
     })
     .sort((a, b) => {
       // Completed participants first, then by accuracy descending
@@ -106,11 +114,13 @@ function updateParticipantList(trials) {
       const statusLabel = s.status === "completed" ? "done" : "running";
       const accText =
         s.acc !== null ? (s.acc * 100).toFixed(0) + "%" : "--";
+      const rtText = s.meanRT !== null ? s.meanRT.toFixed(3) : "--";
       return `<tr>
       <td>${i + 1}</td>
       <td>${escapeHtml(s.username)}</td>
       <td><span class="status-cell"><span class="dot ${dotClass}"></span> ${statusLabel}</span></td>
       <td>${accText}</td>
+      <td>${rtText}</td>
     </tr>`;
     })
     .join("");

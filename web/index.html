@@ -39,6 +39,17 @@
             </div>
 
             <div class="param-group">
+              <label for="param-durations">Durations (ms)</label>
+              <input
+                id="param-durations"
+                type="text"
+                value="40, 200"
+                placeholder="e.g. 40, 200"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="param-group">
               <label for="param-reps">Repetitions</label>
               <select id="param-reps">
                 <option value="1" selected>1 (40 trials)</option>
@@ -175,85 +186,7 @@
 
           <hr />
 
-          <h3>Performance by condition</h3>
-          <table id="summary-table" class="summary-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th colspan="2">Accuracy</th>
-                <th colspan="2">Mean correct RT (s)</th>
-              </tr>
-              <tr>
-                <th>Condition</th>
-                <th id="th-acc-dur0"></th>
-                <th id="th-acc-dur1"></th>
-                <th id="th-rt-dur0"></th>
-                <th id="th-rt-dur1"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Words</td>
-                <td id="acc-word-dur0"></td>
-                <td id="acc-word-dur1"></td>
-                <td id="rt-word-dur0"></td>
-                <td id="rt-word-dur1"></td>
-              </tr>
-              <tr>
-                <td>Pseudowords</td>
-                <td id="acc-pw-dur0"></td>
-                <td id="acc-pw-dur1"></td>
-                <td id="rt-pw-dur0"></td>
-                <td id="rt-pw-dur1"></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h3>By lexicality</h3>
-          <table id="summary-lex" class="summary-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Accuracy</th>
-                <th>Mean correct RT (s)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Words</td>
-                <td id="lex-acc-word"></td>
-                <td id="lex-rt-word"></td>
-              </tr>
-              <tr>
-                <td>Pseudowords</td>
-                <td id="lex-acc-pw"></td>
-                <td id="lex-rt-pw"></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h3>By duration</h3>
-          <table id="summary-dur" class="summary-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Accuracy</th>
-                <th>Mean correct RT (s)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td id="dur-label-0"></td>
-                <td id="dur-acc-0"></td>
-                <td id="dur-rt-0"></td>
-              </tr>
-              <tr>
-                <td id="dur-label-1"></td>
-                <td id="dur-acc-1"></td>
-                <td id="dur-rt-1"></td>
-              </tr>
-            </tbody>
-          </table>
+          <div id="summary-container"></div>
 
           <hr />
 
