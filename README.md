@@ -44,7 +44,7 @@ see [env.yml](env.yml)
 > git add <file you made.etc>
 > git status
     - make sure it says "your branch is up to date" and "changes to be committed: <your file(s)>"
-> git commit -m <useful message about what you did>
+> git commit -m "<useful message about what you did>"
 > git push -u origin main
 ```
 
