@@ -273,12 +273,12 @@ while True:
 if args.practice and not quit_experiment:
     # practice stimuli are separate from the main experiment stimuli
     practice_items = [
-        ('house', 'word'),
-        ('river', 'word'),
-        ('bread', 'word'),
-        ('brike', 'pseudoword'),
-        ('flurn', 'pseudoword'),
-        ('plave', 'pseudoword'),
+        ('finger', 'word'),
+        ('church', 'word'),
+        ('carrot', 'word'),
+        ('hamen', 'pseudoword'),
+        ('pamer', 'pseudoword'),
+        ('waten', 'pseudoword'),
     ]
     # assign durations: half short, half long
     practice_durs = [exp.durations[0]] * 3 + [exp.durations[-1]] * 3

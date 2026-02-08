@@ -16,13 +16,13 @@ class Exp():
 
         # stimuli
         if words is None:
-            self.words = ['garden', 'window', 'table', 'dream', 'silver',
-                          'candle', 'forest', 'winter', 'yellow', 'sudden']
+            self.words = ['river', 'window', 'sugar', 'forest', 'jacket',
+                          'island', 'kitten', 'cheese', 'hammer', 'candle']
         else:
             self.words = words
         if pseudowords is None:
-            self.pseudowords = ['drean', 'gardon', 'tible', 'windal', 'plone',
-                                'froat', 'nemp', 'slinter', 'brask', 'marden']
+            self.pseudowords = ['tible', 'hause', 'gardon', 'flomer', 'desern',
+                                'strean', 'perlun', 'morle', 'stome', 'waper']
         else:
             self.pseudowords = pseudowords
 
