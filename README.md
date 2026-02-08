@@ -4,6 +4,20 @@
 
 "How does visible presentation time influence speed and accuracy in deciding whether a letter string is a real word, when the string is followed by a visual mask?"
 
+## collecting data
+
+- make sure you can follow the steps laid out in the following sections
+- come up with a unique number for your subject that is not already stored in [data/](data/)
+- then run the experiment:
+
+```
+python3 player.py --subj <unique identifier>
+```
+
+- check the data for your subject in [data/](data/)
+- upload the new data in `data/subj_<unique number>` to github using the github instructions below
+- check github on the browser to see if its there or not
+
 ## set up conda environment
 
 see [env.yml](env.yml)
