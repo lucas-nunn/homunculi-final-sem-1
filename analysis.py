@@ -16,6 +16,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pingouin as pg
 
 
 # ---------------------------------------------------------------------------
@@ -137,7 +138,31 @@ print()
 
 
 # ---------------------------------------------------------------------------
-# 5. Plots
+# 5. Repeated-measures ANOVAs (Lexicality x Duration)
+# ---------------------------------------------------------------------------
+print('=' * 60)
+print('REPEATED-MEASURES ANOVA – Accuracy')
+print('=' * 60)
+
+acc_anova_df = clean.groupby(['subject', 'lexicality', 'duration'])['accuracy'].mean().reset_index()
+acc_aov = pg.rm_anova(data=acc_anova_df, dv='accuracy',
+                      within=['lexicality', 'duration'], subject='subject')
+print(acc_aov.to_string(index=False))
+print()
+
+print('=' * 60)
+print('REPEATED-MEASURES ANOVA – Reaction Time (correct trials)')
+print('=' * 60)
+
+rt_anova_df = rt_correct.groupby(['subject', 'lexicality', 'duration'])['RT'].mean().reset_index()
+rt_aov = pg.rm_anova(data=rt_anova_df, dv='RT',
+                     within=['lexicality', 'duration'], subject='subject')
+print(rt_aov.to_string(index=False))
+print()
+
+
+# ---------------------------------------------------------------------------
+# 6. Plots
 # ---------------------------------------------------------------------------
 conditions = clean.groupby(['lexicality', 'duration']).agg(
     accuracy=('accuracy', 'mean'),
